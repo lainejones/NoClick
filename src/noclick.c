@@ -34,7 +34,13 @@ int main(void)
     int rc = RETURN_OK;
 
     if (SysBase->LibNode.lib_Version < 36) {
-        Printf("NoClick needs Kickstart 2.0 or newer.\n");
+        /* Printf() is a V36 dos.library call -- on 1.3 its LVO is garbage.
+         * Output()/Write() exist since V30. Output() is 0 when started
+         * from Workbench, so there is nowhere to print; just fail. */
+        static const char msg[] = "NoClick needs Kickstart 2.0 or newer.\n";
+        BPTR out = Output();
+        if (out)
+            Write(out, (APTR)msg, sizeof(msg) - 1);
         return RETURN_FAIL;
     }
 
