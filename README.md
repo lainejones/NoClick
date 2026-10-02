@@ -11,12 +11,13 @@ by stepping the head *outward past track 0* — a step pulse the mechanism can't
 act on, so it makes no sound. Disk-change detection keeps working normally.
 
 No patches, no interrupts, no background process: NoClick sets the flag and
-exits. 2,660 bytes.
+exits. 2,700 bytes.
 
 ## Requirements
 
-- Kickstart 2.0 (V36) or newer. On 1.3 the flag doesn't exist; use one of the
-  old hardware-poking utilities there instead.
+- Kickstart 2.0 (V36) or newer. On 1.3 the flag doesn't exist: NoClick just
+  says it needs 2.0 and exits with return code 20. Use one of the old
+  hardware-poking utilities there instead.
 
 ## Usage
 
@@ -31,13 +32,22 @@ NoClick [OFF] [UNIT n]
 | `NoClick UNIT 0`  | act on a single unit only (0–3)                 |
 
 It reports each drive it finds (`DF0: clicking off`) and skips absent units.
-Return codes: 0 = OK, 5 = no trackdisk units found, 10 = bad argument.
+Return codes: 0 = OK, 5 = no trackdisk units found, 10 = bad argument,
+20 = Kickstart older than 2.0 (nothing changed).
 
 ## Installation
 
-1. Copy the binary to `C:`:
+The release archive unpacks to a `NoClick` drawer (with `NoClick.info` beside
+it) holding the `NoClick` program and this `README.md`. NoClick is a Shell
+command, so the program has no icon of its own.
+
+Use the **`.lha`**: a `.zip` can't carry AmigaDOS protection bits, so if you
+unpacked a `.zip`, run `protect NoClick +e` in the drawer first.
+
+1. Copy the binary to `C:` (from a Shell in the `NoClick` drawer):
    ```
    copy NoClick C:
+   protect C:NoClick +e
    ```
 2. Add it to the end of `S:User-Startup` so it runs every boot:
    ```
@@ -74,6 +84,7 @@ Cross-compile with [amiga-gcc](https://github.com/bebbo/amiga-gcc) (Bebbo):
 
 ```
 m68k-amigaos-gcc -O2 -noixemul -Wall -fomit-frame-pointer -s -o out/NoClick src/noclick.c
+python3 tools/mkpkg.py      # stage out/release/NoClick/ + NoClick.info
 ```
 
 ## License

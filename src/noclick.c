@@ -20,7 +20,7 @@
 #include <proto/exec.h>
 #include <proto/dos.h>
 
-static const char ver[] = "$VER: NoClick 1.0 (9.8.2026)";
+static const char ver[] = "$VER: NoClick 1.0.1 (2.10.2026)";
 
 #define TEMPLATE "OFF/S,UNIT/N"
 
